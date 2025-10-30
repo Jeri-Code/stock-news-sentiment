@@ -67,5 +67,13 @@ uploads/
 temp/
 tmp/
 
+#FILES TO KEEP
+
 # --- Git keep placeholders ---
 !*/.gitkeep
+
+# --- Streamlit Cloud safe (keep these) ---
+!.streamlit/config.toml     # keep your theme if you want it shared
+!requirements.txt
+!app.py
+!pages/**
