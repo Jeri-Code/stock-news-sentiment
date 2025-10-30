@@ -5,15 +5,23 @@ __pycache__/
 *.pyd
 *.pkl
 *.egg-info/
-.env
-.env.*
 .venv/
 venv/
 ENV/
+env/
 env.bak/
 
+# --- Environment / Secrets ---
+.env
+.env.*
+*.key
+*.pem
+*.crt
+
 # --- Streamlit ---
+.streamlit/secrets.toml
 .cache/
+
 # --- Airflow ---
 airflow/airflow.db
 airflow/airflow.cfg
@@ -34,6 +42,7 @@ run_results.json
 .ipynb_checkpoints/
 *.ipynb
 *.db
+*.sqlite
 
 # --- VSCode / Editor junk ---
 .vscode/
@@ -53,6 +62,8 @@ desktop.ini
 __docker_build__/
 *.local
 *~lock*
+docker-compose.override.yml
+Dockerfile.dev
 
 # --- Data / output files ---
 data/
@@ -62,14 +73,22 @@ downloads/
 uploads/
 temp/
 tmp/
+*.csv
+*.parquet
 
-#FILES TO KEEP
+# --- Node / frontend (if added later) ---
+node_modules/
+npm-debug.log
+yarn-error.log
 
-# --- Git keep placeholders ---
-!*/.gitkeep
-
-# --- Streamlit Cloud safe (keep these) ---
-!.streamlit/config.toml     # keep your theme if you want it shared
+# --- Files to KEEP in image build context ---
 !requirements.txt
 !app.py
 !pages/**
+!.streamlit/config.toml
+!warehouse/models/**
+!sentiment/**
+!ingestion/**
+!airflow/dags/**
+!dashboards/**
+!*/.gitkeep
