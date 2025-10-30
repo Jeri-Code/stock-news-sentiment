@@ -1,0 +1,71 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.egg-info/
+.env
+.env.*
+.venv/
+venv/
+ENV/
+env.bak/
+
+# --- Streamlit ---
+.streamlit/secrets.toml
+.streamlit/config.toml  # keep local themes/configs out of prod if different
+.cache/
+# If using Streamlit Cloud, remove the above line if you want theme shared
+
+# --- Airflow ---
+airflow/airflow.db
+airflow/airflow.cfg
+airflow/logs/
+airflow/plugins/__pycache__/
+airflow/.env
+dags/__pycache__/
+
+# --- dbt ---
+target/
+dbt_modules/
+dbt_packages/
+logs/
+manifest.json
+run_results.json
+
+# --- Jupyter / local notebooks ---
+.ipynb_checkpoints/
+*.ipynb
+*.db
+
+# --- VSCode / Editor junk ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- OS / misc ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# --- Docker / build ---
+*.pid
+*.sock
+*.tmp
+__docker_build__/
+*.local
+*~lock*
+
+# --- Data / output files ---
+data/
+output/
+exports/
+downloads/
+uploads/
+temp/
+tmp/
+
+# --- Git keep placeholders ---
+!*/.gitkeep
