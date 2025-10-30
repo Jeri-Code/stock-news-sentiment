@@ -33,7 +33,7 @@ flowchart TD
 ```
 
 ## DB Schema (Initial)
-```erDiagram
+```mermaid
   DIM_TICKER ||--o{ FACT_PRICE : "by symbol_id"
   DIM_TICKER ||--o{ FACT_NEWS : "by symbol_id"
   DIM_TICKER ||--o{ FACT_SOCIAL_MESSAGE : "by symbol_id"
