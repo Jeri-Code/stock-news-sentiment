@@ -34,33 +34,14 @@ flowchart TD
 ```
 
 ## Repo Layout (initial)
-
-stocks-news-sentiment/
-├── README.md               # project overview
-├── airflow/                # Airflow DAGs (next commit)
-│   └── dags/
-├── ingestion/              # Python extractors (next commit)
-│   ├── extract_prices.py
-│   ├── extract_news.py
-│   └── score_news.py
-├── sentiment/              # NLP models (next commit)
-│   ├── finbert.py
-│   └── vader.py
-├── warehouse/              # dbt project (next commit)
-│   ├── dbt_project.yml
-│   ├── profiles.yml
-│   └── models/
-│       ├── staging/
-│       ├── core/
-│       └── marts/
-├── dashboards/             # Superset exports (later)
-│   └── superset_export.json
-└── docs/                   # architecture, data dictionary, runbook
-    ├── architecture.md
-    ├── data_dictionary.md
-    ├── runbook.md
-    └── decisions.md
-
+```text
+├── README.md
+├── airflow/          (next)
+├── ingestion/        (next)
+├── sentiment/        (next)
+├── warehouse/        (dbt; next)
+└── dashboards/       (later)
+```
 
 
 ## Roadmap
