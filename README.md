@@ -15,7 +15,7 @@ An open-source, production-style data platform that ingests **market prices**, *
 **Transforms:** dbt \
 **Orchestration:** Airflow \
 **NLP:** FinBERT, VADER\
-**BI:** Apache Superset\
+**BI:** Streamlit\
 **CI:** GitHub Actions 
 
 ## Architechture
