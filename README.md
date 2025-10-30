@@ -33,22 +33,7 @@ flowchart TD
 ```
 
 ## DB Schema (Initial)
-```mermaid
-  DIM_TICKER ||--o{ FACT_PRICE : "by symbol_id"
-  DIM_TICKER ||--o{ FACT_NEWS : "by symbol_id"
-  DIM_TICKER ||--o{ FACT_SOCIAL_MESSAGE : "by symbol_id"
-
-  DIM_CALENDAR ||--o{ FACT_PRICE : "by date_key"
-  DIM_CALENDAR ||--o{ FACT_NEWS : "by date_key"
-  DIM_CALENDAR ||--o{ FACT_SOCIAL_MESSAGE : "by date_key"
-
-  DIM_SOURCE ||--o{ FACT_NEWS : "published_by"
-  DIM_SOURCE ||--o{ FACT_SOCIAL_MESSAGE : "from_platform"
-
-  FACT_NEWS ||--o{ MART_EVENT_STUDY : "joined to fwd returns"
-  FACT_NEWS ||--o{ MART_SENTIMENT_TREND : "aggregated daily"
-  FACT_SOCIAL_MESSAGE ||--o{ MART_SENTIMENT_TREND : "aggregated daily"
-
+```text
   DIM_TICKER {
     int symbol_id PK
     string ticker UK
