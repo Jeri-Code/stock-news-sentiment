@@ -31,5 +31,8 @@ docker compose run --rm airflow-init
 docker compose up -d streamlit airflow-webserver airflow-scheduler
 
 docker compose ps
+Write-Host ""
 Write-Host "Streamlit: http://localhost:8501"
 Write-Host "Airflow:   http://localhost:8080"
+Write-Host ""
+Write-Host "All services running."
