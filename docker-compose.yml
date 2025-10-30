@@ -41,19 +41,21 @@ services:
   airflow-init:
     image: apache/airflow:2.9.2-python3.11
     container_name: sns_airflow_init
+    restart: "no"
     env_file: .env
     entrypoint: /bin/bash
     command: >
       -c "
-      airflow db init &&
-      airflow users create
-        --username ${AIRFLOW_USER}
-        --password ${AIRFLOW_PASSWORD}
-        --firstname Admin --lastname User
-        --role Admin --email ${AIRFLOW_EMAIL}
+      set -e;
+      airflow db migrate;
+      airflow users list | grep -q \" ${AIRFLOW_USER} \" || airflow users create --username ${AIRFLOW_USER} --password ${AIRFLOW_PASSWORD} --firstname Admin --lastname User --role Admin --email ${AIRFLOW_EMAIL};
+      airflow connections create-default-connections || true
       "
     environment:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${PG_USER}:${PG_PASSWORD}@db:${PG_PORT}/${PG_DB}
+      AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
+      AIRFLOW__WEBSERVER__SECRET_KEY: ${WEBSERVER_SECRET_KEY}
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
