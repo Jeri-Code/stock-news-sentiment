@@ -25,12 +25,12 @@ flowchart TD
     A1[Price APIs] --> B[Python Extractors]
     A2[News APIs] --> B
     A3[Reddit API] --> B
-    B --> C[RAW Storage (Parquet / JSON)]
-    C --> D[dbt STAGING]
-    D --> E[dbt CORE (facts / dims)]
-    E --> F[dbt MARTS (analytics)]
-    F --> G[Superset Dashboards]
-    F --> H[Slack Alerts]
+    B --> C["RAW Storage (Parquet / JSON)"]
+    C --> D["dbt STAGING"]
+    D --> E["dbt CORE (facts / dims)"]
+    E --> F["dbt MARTS (analytics)"]
+    F --> G["Superset Dashboards"]
+    F --> H["Slack Alerts"]
 ```
 
 ## Repo Layout (initial)
