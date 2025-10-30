@@ -19,27 +19,36 @@ An open-source, production-style data platform that ingests **market prices**, *
 **CI:** GitHub Actions 
 
 ## Architechture
-[Prices APIs] [News APIs] [Reddit]
-↓ ↓ ↓
-Python Extractors
-↓ ↓ ↓
-RAW (Parquet/JSON)
-↓
-dbt STAGING
-↓
-dbt CORE (facts/dims)
-↓
-dbt MARTS (analytics)
-↓
-Streamlit
+[ Price APIs ]     [ News APIs ]     [ Reddit ]
+       │                 │               │
+       ├────► Python Extractors ◄────────┤
+                     │
+                     ▼
+              RAW Storage (Parquet / JSON)
+                     │
+                     ▼
+                dbt STAGING
+                     │
+                     ▼
+             dbt CORE (facts / dims)
+                     │
+                     ▼
+             dbt MARTS (analytics)
+                     │
+          ┌──────────┴──────────┐
+          ▼                     ▼
+   Superset Dashboards     Slack Alerts
+
 
 ## Repo Layout (initial)
-├── README.md
-├── airflow/ (next)
-├── ingestion/ (next)
-├── sentiment/ (next)
-├── warehouse/ (dbt; next)
-└── dashboards/ (later)
+├── README.md                 → project overview
+├── airflow/                  → Airflow DAGs (next commit)
+├── ingestion/                → Python extractors (next commit)
+├── sentiment/                → NLP models (next commit)
+├── warehouse/                → dbt project (next commit)
+│   └── models/
+├── dashboards/               → Superset exports (later)
+└── docs/                     → architecture, data dictionary, runbook
 
 
 ## Roadmap
