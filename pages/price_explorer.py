@@ -17,3 +17,18 @@ try:
     st.dataframe(df)
 except Exception as e:
     st.error(f"Error: {e}")
+
+try:
+    with engine.connect() as conn:
+        df = pd.read_sql("SELECT * FROM raw.raw_price;", conn)
+    st.dataframe(df)
+except Exception as e:
+    st.error(f"Error: {e}")
+
+
+try:
+    with engine.connect() as conn:
+        df = pd.read_sql("SELECT * FROM dim_calendar;", conn)
+    st.dataframe(df)
+except Exception as e:
+    st.error(f"Error: {e}")
