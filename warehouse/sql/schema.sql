@@ -1,3 +1,6 @@
+-- ===== SCHEMAS =====
+CREATE SCHEMA IF NOT EXISTS raw;
+
 -- ===== DIMENSIONS =====
 CREATE TABLE IF NOT EXISTS dim_ticker (
     symbol_id SERIAL PRIMARY KEY,
@@ -37,6 +40,8 @@ CREATE TABLE IF NOT EXISTS fact_price (
     PRIMARY KEY (symbol_id, date_key)
 );
 
+CREATE INDEX IF NOT EXISTS fact_price_symbol_date_idx ON fact_price(symbol_id, date_key);
+
 CREATE TABLE IF NOT EXISTS fact_news (
     news_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     symbol_id INT REFERENCES dim_ticker(symbol_id),
@@ -65,3 +70,14 @@ CREATE TABLE IF NOT EXISTS fact_social_message (
     model_sentiment NUMERIC,
     model_label TEXT
 );
+
+-- ===== RAW LANDING (append-only) =====
+CREATE TABLE IF NOT EXISTS raw.raw_price (
+    ticker TEXT,
+    date DATE,
+    open NUMERIC, high NUMERIC, low NUMERIC, close NUMERIC,
+    adj_close NUMERIC,
+    volume BIGINT,
+    ingested_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS raw_price_ticker_date_idx ON raw.raw_price(upper(ticker), date);
