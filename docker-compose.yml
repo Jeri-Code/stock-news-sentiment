@@ -56,6 +56,11 @@ services:
       AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
       AIRFLOW__WEBSERVER__SECRET_KEY: ${WEBSERVER_SECRET_KEY}
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      ALPHAVANTAGE_API_KEY: ${ALPHAVANTAGE_API_KEY}
+      TICKERS: ${TICKERS}
+      AV_FUNCTION: ${AV_FUNCTION}
+      AV_OUTPUTSIZE: ${AV_OUTPUTSIZE}
+      AV_SLEEP_SECONDS: ${AV_SLEEP_SECONDS}
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
@@ -74,8 +79,10 @@ services:
     environment:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${PG_USER}:${PG_PASSWORD}@db:${PG_PORT}/${PG_DB}
     volumes:
+  
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
+      - ./ingestion:/opt/ingestion
     depends_on:
       db:
         condition: service_healthy
@@ -91,9 +98,10 @@ services:
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
-      - ./ingestion:/opt/airflow/ingestion 
+      - ./ingestion:/opt/ingestion 
     depends_on:
       db:
         condition: service_healthy
+volumes:
 
-pgdata:
+  pgdata:

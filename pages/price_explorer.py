@@ -13,7 +13,7 @@ engine = create_engine(dsn)
 
 try:
     with engine.connect() as conn:
-        df = pd.read_sql("SELECT * FROM dim_ticker LIMIT 5;", conn)
+        df = pd.read_sql("SELECT * FROM stg_price;", conn)
     st.dataframe(df)
 except Exception as e:
     st.error(f"Error: {e}")
