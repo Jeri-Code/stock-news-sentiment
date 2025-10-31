@@ -14,40 +14,31 @@ if not API:
     raise SystemExit("Missing ALPHAVANTAGE_API_KEY")
 
 def fetch_daily(symbol: str, retries: int = 4) -> pd.DataFrame:
-    """Pull TIME_SERIES_DAILY (free) with polite backoff."""
-    url = (
-        "https://www.alphavantage.co/query"
-        f"?function={FUNC}&symbol={symbol}&outputsize={SIZE}&apikey={API}"
-    )
+    url = f"https://www.alphavantage.co/query?function={FUNC}&symbol={symbol}&outputsize={SIZE}&apikey={API}"
     for attempt in range(1, retries + 1):
         r = requests.get(url, timeout=30)
         try:
             j = r.json()
         except Exception:
             j = {}
-        # Throttle/premium messages come back as Note/Information
         if "Time Series (Daily)" in j:
             ts = j["Time Series (Daily)"]
-            rows = []
-            for d, v in ts.items():
-                rows.append({
-                    "ticker": symbol,
-                    "date": d,
-                    "open": float(v["1. open"]),
-                    "high": float(v["2. high"]),
-                    "low":  float(v["3. low"]),
-                    "close":float(v["4. close"]),
-                    "adj_close": float(v["4. close"]),  # no adjusted on free DAILY
-                    "volume": int(v["5. volume"]),
-                    "ingested_at": datetime.utcnow()
-                })
+            rows = [{
+                "ticker": symbol,
+                "date": d,
+                "open": float(v["1. open"]),
+                "high": float(v["2. high"]),
+                "low":  float(v["3. low"]),
+                "close":float(v["4. close"]),
+                "adj_close": float(v["4. close"]),
+                "volume": int(v["5. volume"]),
+                "ingested_at": datetime.utcnow()
+            } for d, v in ts.items()]
             return pd.DataFrame(rows)
         else:
             msg = j.get("Note") or j.get("Information") or j.get("Error Message") or str(j)[:200]
             print(f"[WARN] {symbol} attempt {attempt}/{retries}: {msg}")
-            # backoff then retry
-            time.sleep(SLEEP if "Note" in j or "Information" in j else min(SLEEP, 5))
-    # all retries failed
+            time.sleep(SLEEP if ("Note" in j or "Information" in j) else min(SLEEP, 5))
     return pd.DataFrame(columns=["ticker","date","open","high","low","close","adj_close","volume","ingested_at"])
 
 def main():
@@ -57,7 +48,6 @@ def main():
         df = fetch_daily(tkr)
         if not df.empty:
             all_rows.append(df)
-        # respect rate limit between symbols
         if i < len(TICKERS):
             time.sleep(SLEEP)
 
@@ -65,9 +55,11 @@ def main():
         raise SystemExit("No data returned from Alpha Vantage.")
 
     out = pd.concat(all_rows, ignore_index=True)
+
     with engine.begin() as conn:
+        conn.exec_driver_sql("CREATE SCHEMA IF NOT EXISTS raw;")
         conn.exec_driver_sql("""
-            CREATE TABLE IF NOT EXISTS stg_price (
+            CREATE TABLE IF NOT EXISTS raw.raw_price (
               ticker TEXT,
               date DATE,
               open NUMERIC, high NUMERIC, low NUMERIC, close NUMERIC,
@@ -75,9 +67,9 @@ def main():
               ingested_at TIMESTAMPTZ
             );
         """)
-    # dev: replace; in prod switch to upsert/merge on (ticker,date)
-    out.to_sql("stg_price", engine, if_exists="replace", index=False)
-    print(f"[OK] loaded {len(out)} rows -> stg_price")
+
+    out.to_sql("raw_price", engine, schema="raw", if_exists="append", index=False)
+    print(f"[OK] appended {len(out)} rows -> raw.raw_price")
 
 if __name__ == "__main__":
     main()
