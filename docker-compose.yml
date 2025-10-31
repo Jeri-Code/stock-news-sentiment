@@ -91,9 +91,9 @@ services:
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
+      - ./ingestion:/opt/airflow/ingestion 
     depends_on:
       db:
         condition: service_healthy
 
-volumes:
-  pgdata:
+pgdata:
